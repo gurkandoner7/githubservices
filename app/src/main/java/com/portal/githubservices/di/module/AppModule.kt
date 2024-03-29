@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.portal.githubservices.data.GithubService
+import com.portal.githubservices.repository.db.LocalDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,4 +33,11 @@ class AppModule {
             .client(okHttpClient)
             .build()
             .create(GithubService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideRoomDatabase(application: Application): LocalDatabase {
+        return Room.databaseBuilder(application, LocalDatabase::class.java, "local-database")
+            .allowMainThreadQueries().build()
+    }
 }

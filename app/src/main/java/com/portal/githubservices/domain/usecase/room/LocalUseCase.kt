@@ -1,13 +1,13 @@
 package com.portal.githubservices.domain.usecase.room
 
-import com.portal.githubservices.repository.db.FavoriteEntity
+import com.portal.githubservices.repository.db.UserDetailEntity
 
 interface LocalUseCase {
-    suspend fun getAllFavorites(): List<FavoriteEntity>
+    suspend fun getAllUserDetails(): List<UserDetailEntity>
 
-    suspend fun addFavorite(favoriteEntity: FavoriteEntity)
+    suspend fun addUserDetail(userDetailEntity: UserDetailEntity)
 
-    suspend fun addFavoriteList(favoriteEntity: List<FavoriteEntity>)
+    suspend fun addUserDetailList(userDetailEntity: List<UserDetailEntity>)
 
-    suspend fun deleteAllFavorites()
+    suspend fun deleteAllUserDetails()
 }

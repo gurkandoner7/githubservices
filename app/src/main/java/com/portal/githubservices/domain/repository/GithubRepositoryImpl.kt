@@ -3,8 +3,8 @@ package com.portal.githubservices.domain.repository
 import com.portal.githubservices.data.GithubService
 import com.portal.githubservices.data.model.GithubUserDetailItem
 import com.portal.githubservices.data.model.GithubUserItem
+import com.portal.githubservices.domain.mapper.toGithubUserDetailItem
 import com.portal.githubservices.domain.mapper.toGithubUserItem
-import com.portal.githubservices.domain.mapper.toGithubUserRepoItem
 import javax.inject.Inject
 
 class GithubRepositoryImpl @Inject constructor(
@@ -25,7 +25,7 @@ class GithubRepositoryImpl @Inject constructor(
         user: String
     ): GithubUserDetailItem {
         try {
-            return githubService.getUserRepositories(user).toGithubUserRepoItem()
+            return githubService.getUserRepositories(user).toGithubUserDetailItem()
         } catch (e: Exception) {
             throw e
         }

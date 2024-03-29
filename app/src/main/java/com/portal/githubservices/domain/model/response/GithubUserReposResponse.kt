@@ -3,8 +3,9 @@ package com.portal.githubservices.domain.model.response
 import java.io.Serializable
 
 data class GithubUserDetailResponse(
+    val id: Long,
     val login: String? = "",
-    val avatar_url: String? ="",
+    val avatar_url: String? = "",
     val public_repos: String? = "",
     val followers: String? = "",
     val following: String? = "",

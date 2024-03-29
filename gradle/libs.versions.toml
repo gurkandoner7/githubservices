@@ -43,6 +43,8 @@ network-okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref 
 network-okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "network-okhttp" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = {group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx= {group = "androidx.room", name = "room-ktx", version.ref = "room"}
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }

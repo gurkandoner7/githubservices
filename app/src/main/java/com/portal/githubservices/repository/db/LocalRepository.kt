@@ -7,14 +7,15 @@ import javax.inject.Singleton
 class LocalRepository @Inject internal constructor(
     localDatabase: LocalDatabase
 ) {
-    private val favoriteDao = localDatabase.favoriteDao()
+    private val userDetailDao = localDatabase.userDetailDao()
 
-    fun getAllFavorites(): List<FavoriteEntity> = favoriteDao.getAllFavorites()
+    fun getAllUserDetails(): List<UserDetailEntity> = userDetailDao.getAllUserDetails()
 
-    fun addFavorite(favoriteEntity: FavoriteEntity) = favoriteDao.addFavorite(favoriteEntity)
+    fun addUserDetail(userDetailEntity: UserDetailEntity) =
+        userDetailDao.addUserDetail(userDetailEntity)
 
-    fun deleteAllFavorites() = favoriteDao.deleteAllFavorites()
+    fun deleteAllUserDetails() = userDetailDao.deleteAllUserDetails()
 
-    fun addFavoriteList(favoriteEntity: List<FavoriteEntity>) =
-        favoriteDao.addFavoriteList(favoriteEntity)
+    fun addUserDetailList(userDetailEntity: List<UserDetailEntity>) =
+        userDetailDao.addUserDetailList(userDetailEntity)
 }

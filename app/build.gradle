@@ -56,7 +56,10 @@ dependencies {
     implementation libs.hilt
     implementation libs.androidx.legacy.support.v4
     implementation libs.androidx.fragment.ktx
+    implementation libs.room.ktx
     kapt libs.hilt.compiler
+    //noinspection KaptUsageInsteadOfKsp
+    kapt libs.room.compiler
 
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit

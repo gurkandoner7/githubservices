@@ -40,7 +40,6 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                 }
                 return true
             }
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }

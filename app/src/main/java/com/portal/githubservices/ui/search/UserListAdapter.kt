@@ -27,8 +27,8 @@ class UserListAdapter(
                     item.avatar_url, R.drawable.ic_notifications_black_24dp
                 )
                 btnFavorite.setOnClickListener {
-                    item.isFavorite = !item.isFavorite
-                    btnFavorite.isActivated = item.isFavorite
+                    item.isFavorite = !item.isFavorite!!
+                    btnFavorite.isActivated = !btnFavorite.isActivated
                 }
             }
         }
