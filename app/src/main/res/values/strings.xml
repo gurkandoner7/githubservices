@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">githubservices</string>
+    <string name="title_search">Search</string>
+    <string name="title_favorites">Favorites</string>
+    <string name="title_detail">Detail</string>
+    <string name="followers">Followers:%!%!</string>
+    <string name="following">Following:%!%!</string>
+    <string name="repository_amount">Repository Amount:%!%!</string>
+</resources>
