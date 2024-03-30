@@ -9,6 +9,8 @@ import com.portal.githubservices.R
 import com.portal.githubservices.compose.BaseFragment
 import com.portal.githubservices.compose.viewBinding
 import com.portal.githubservices.databinding.FragmentSearchBinding
+import com.portal.githubservices.domain.mapper.toFavoriteEntity
+import com.portal.githubservices.domain.mapper.toSearchResultEntity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -23,10 +25,11 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
         lifecycleScope.launch {
             launch {
                 searchViewModel.searchedUser.collect {
+                    searchViewModel.addSearchResult(it.items.toSearchResultEntity())
                     adapter.updateItems(it.items)
-
                 }
             }
+
         }
     }
 
@@ -40,11 +43,13 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                 }
                 return true
             }
+
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }
         })
-
+        searchViewModel.getSearchResultListFromDb()
+        adapter.updateItems(searchViewModel.searchedUserFromCache.value)
     }
 
     private fun setAdapter() {
@@ -54,6 +59,11 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
             }
             view?.findNavController()
                 ?.navigate(R.id.action_navigation_search_to_navigation_detail, bundle)
+        }, onFavoriteStateChanged = { item ->
+            if (item.isFavorite) {
+                searchViewModel.updateFavorite(item.toFavoriteEntity())
+            }
+
         })
         binding.rvUserList.adapter = adapter
     }

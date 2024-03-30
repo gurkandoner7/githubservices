@@ -5,6 +5,8 @@ import com.portal.githubservices.data.model.GithubUserDetailItem
 import com.portal.githubservices.data.model.GithubUserItem
 import com.portal.githubservices.domain.model.response.GithubUserDetailResponse
 import com.portal.githubservices.domain.model.response.GithubUsersResponse
+import com.portal.githubservices.repository.db.FavoriteEntity
+import com.portal.githubservices.repository.db.SearchResultEntity
 import com.portal.githubservices.repository.db.UserDetailEntity
 import javax.inject.Inject
 
@@ -20,6 +22,52 @@ fun GithubUsersResponse.toGithubUserItem(): GithubUserItem {
         })
 }
 
+fun List<FavoriteEntity>.toGitHubUserInfoList(): List<GitHubUserInfoItem> {
+    return map {
+        GitHubUserInfoItem(
+            id = it.id,
+            login = it.login,
+            avatar_url = it.avatar_url,
+            isFavorite = it.isFavorite
+        )
+    }
+}
+
+fun GitHubUserInfoItem.toFavoriteEntity(): FavoriteEntity {
+    return FavoriteEntity(
+        id, login, avatar_url, isFavorite
+    )
+}
+
+fun List<GitHubUserInfoItem>.toSearchResultEntity(): List<SearchResultEntity> {
+    val searchResultList = mutableListOf<SearchResultEntity>()
+    for (user in this) {
+        val searchResult = SearchResultEntity(
+            id = user.id,
+            avatar_url = user.avatar_url,
+            login = user.login,
+            isFavorite = user.isFavorite
+        )
+        searchResultList.add(searchResult)
+    }
+    return searchResultList
+}
+
+fun List<SearchResultEntity>.toGitHubUserInfoItem(): List<GitHubUserInfoItem> {
+    val gitHubUserList = mutableListOf<GitHubUserInfoItem>()
+    for (searchResult in this) {
+        val gitHubUser = GitHubUserInfoItem(
+            id = searchResult.id,
+            avatar_url = searchResult.avatar_url,
+            login = searchResult.login,
+            isFavorite = searchResult.isFavorite
+        )
+        gitHubUserList.add(gitHubUser)
+    }
+    return gitHubUserList
+}
+
+
 fun GithubUserDetailResponse.toGithubUserDetailItem(): GithubUserDetailItem {
     return GithubUserDetailItem(
         id = id,
@@ -28,7 +76,8 @@ fun GithubUserDetailResponse.toGithubUserDetailItem(): GithubUserDetailItem {
         public_repos = public_repos,
         followers = followers,
         following = following,
-        isFavorite = isFavorite    )
+        isFavorite = isFavorite
+    )
 }
 
 fun UserDetailEntity.toGithubUserDetailItem(): GithubUserDetailItem {
@@ -53,4 +102,6 @@ fun GithubUserDetailItem.toUserDetailEntity(): UserDetailEntity {
         following = following,
         isFavorite = isFavorite
     )
+
+
 }

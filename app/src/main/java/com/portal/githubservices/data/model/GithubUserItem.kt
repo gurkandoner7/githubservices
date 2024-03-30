@@ -8,8 +8,8 @@ data class GithubUserItem(
 )
 
 data class GitHubUserInfoItem(
-    val id: Int? = 0,
+    val id: Long,
     val login: String? = "",
     val avatar_url: String? = "",
-    var isFavorite: Boolean? = false
+    var isFavorite: Boolean = false
 )

@@ -1,7 +1,6 @@
 package com.portal.githubservices.ui.detail
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.portal.githubservices.R
@@ -43,13 +42,18 @@ class DetailFragment : BaseFragment(R.layout.fragment_detail) {
                             )
                         }
                     }
-
+                    detailViewModel.checkFavoriteState(response.isFavorite)
+                }
+            }
+            launch {
+                detailViewModel.favoriteState.collect {favoriteState ->
+                    binding.ivFavorite.isActivated = favoriteState
                 }
             }
             launch {
                 detailViewModel.getAllUserDetails.collect { entityResponse ->
                     entityResponse.forEach { detailEntity ->
-                        Log.d("DetailFragment", detailEntity.toString())
+                        binding.ivFavorite.isActivated = detailEntity.isFavorite
                     }
                 }
             }
@@ -57,6 +61,7 @@ class DetailFragment : BaseFragment(R.layout.fragment_detail) {
     }
 
     override fun initUI(savedInstanceState: Bundle?) {
+
         detailViewModel.getSelectedUserRepos(arguments?.getString("login") ?: "null")
         binding.testButton.setOnClickListener {
             detailViewModel.getAllUserDetails()

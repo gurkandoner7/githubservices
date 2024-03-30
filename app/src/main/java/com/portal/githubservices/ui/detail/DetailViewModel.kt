@@ -7,7 +7,9 @@ import com.portal.githubservices.domain.usecase.GithubUseCase
 import com.portal.githubservices.domain.usecase.room.LocalUseCase
 import com.portal.githubservices.repository.db.UserDetailEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -26,6 +28,9 @@ class DetailViewModel @Inject constructor(
 
     private val _getAllUserDetails = MutableStateFlow<List<UserDetailEntity>>(emptyList())
     val getAllUserDetails = _getAllUserDetails.asStateFlow()
+
+    private val _favoriteState = MutableStateFlow<Boolean>(false)
+    val favoriteState = _favoriteState.asStateFlow()
 
     fun getSelectedUserRepos(
         user: String
@@ -51,4 +56,14 @@ class DetailViewModel @Inject constructor(
         }
     }
 
+/*
+    fun checkFavoriteState(id: Long): Deferred<Boolean> {
+        return viewModelScope.async(Dispatchers.IO) {
+            localUseCase.getFavorite().filter { it.id == id }.first().isFavorite
+        }
+    }
+*/
+    fun checkFavoriteState(state: Boolean){
+        _favoriteState.value = state
+    }
 }
