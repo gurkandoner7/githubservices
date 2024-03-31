@@ -19,6 +19,4 @@ interface SearchResultDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addSearchResultList(searchResultEntities: List<SearchResultEntity>)
 
-    @Query("UPDATE search_result_table SET isFavorite = :isFavorite WHERE id = :id")
-    fun updateFavorite(id: Long, isFavorite: Boolean)
 }

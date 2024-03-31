@@ -17,7 +17,6 @@ interface FavoriteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addFavorite(favoriteEntity: FavoriteEntity)
 
-    @Query("UPDATE favorite_table SET isFavorite = :isFavorite WHERE id = :id")
-    fun updateFavorite(id: Long, isFavorite: Boolean)
+
 
 }

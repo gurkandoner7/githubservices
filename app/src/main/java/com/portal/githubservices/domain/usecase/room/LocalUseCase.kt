@@ -16,5 +16,4 @@ interface LocalUseCase {
     suspend fun addFavorite(favoriteEntity: FavoriteEntity)
     suspend fun getFavorite(): List<FavoriteEntity>
     suspend fun deleteFavorite(favoriteEntity: FavoriteEntity)
-    suspend fun updateFavorite(favoriteEntity: FavoriteEntity)
 }

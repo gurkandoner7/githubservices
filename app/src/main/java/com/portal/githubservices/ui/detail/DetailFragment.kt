@@ -53,7 +53,6 @@ class DetailFragment : BaseFragment(R.layout.fragment_detail) {
             launch {
                 detailViewModel.getAllUserDetails.collect { entityResponse ->
                     entityResponse.forEach { detailEntity ->
-                        binding.ivFavorite.isActivated = detailEntity.isFavorite
                     }
                 }
             }

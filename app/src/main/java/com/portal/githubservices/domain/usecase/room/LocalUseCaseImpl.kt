@@ -35,5 +35,4 @@ class LocalUseCaseImpl @Inject constructor(private val localRepository: LocalRep
     override suspend fun addFavorite(favoriteEntity: FavoriteEntity) =
         localRepository.addFavorite(favoriteEntity)
 
-    override suspend fun updateFavorite(favoriteEntity: FavoriteEntity) = localRepository.updateFavorite(favoriteEntity)
 }

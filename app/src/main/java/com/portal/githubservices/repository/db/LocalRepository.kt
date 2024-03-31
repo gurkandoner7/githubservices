@@ -32,17 +32,6 @@ class LocalRepository @Inject internal constructor(
     fun deleteFavorite(favoriteEntity: FavoriteEntity) = favoriteDao.deleteFavorite(favoriteEntity)
     fun addFavorite(favoriteEntity: FavoriteEntity) = favoriteDao.addFavorite(favoriteEntity)
 
-    @Transaction
-    fun updateFavorite(favoriteEntity: FavoriteEntity) {
-        if (!favoriteEntity.isFavorite) {
-            favoriteDao.deleteFavorite(favoriteEntity)
-        }else{
-            favoriteDao.addFavorite(favoriteEntity)
-        }
-        favoriteDao.updateFavorite(favoriteEntity.id, favoriteEntity.isFavorite)
-        searchResultDao.updateFavorite(favoriteEntity.id, favoriteEntity.isFavorite)
-        userDetailDao.updateFavorite(favoriteEntity.id, favoriteEntity.isFavorite)
-    }
 }
 
 

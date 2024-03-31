@@ -13,11 +13,12 @@ import javax.inject.Inject
 class DataMapper @Inject constructor()
 
 fun GithubUsersResponse.toGithubUserItem(): GithubUserItem {
-    return GithubUserItem(totalCount = totalCount,
+    return GithubUserItem(
+        totalCount = totalCount,
         incompleteResults = incompleteResults,
         items = items.map {
             GitHubUserInfoItem(
-                id = it.id, login = it.login, avatar_url = it.avatar_url, isFavorite = it.isFavorite
+                id = it.id, login = it.login, avatar_url = it.avatar_url
             )
         })
 }
@@ -28,14 +29,13 @@ fun List<FavoriteEntity>.toGitHubUserInfoList(): List<GitHubUserInfoItem> {
             id = it.id,
             login = it.login,
             avatar_url = it.avatar_url,
-            isFavorite = it.isFavorite
         )
     }
 }
 
 fun GitHubUserInfoItem.toFavoriteEntity(): FavoriteEntity {
     return FavoriteEntity(
-        id, login, avatar_url, isFavorite
+        id, login, avatar_url
     )
 }
 
@@ -46,7 +46,6 @@ fun List<GitHubUserInfoItem>.toSearchResultEntity(): List<SearchResultEntity> {
             id = user.id,
             avatar_url = user.avatar_url,
             login = user.login,
-            isFavorite = user.isFavorite
         )
         searchResultList.add(searchResult)
     }
@@ -60,7 +59,6 @@ fun List<SearchResultEntity>.toGitHubUserInfoItem(): List<GitHubUserInfoItem> {
             id = searchResult.id,
             avatar_url = searchResult.avatar_url,
             login = searchResult.login,
-            isFavorite = searchResult.isFavorite
         )
         gitHubUserList.add(gitHubUser)
     }
@@ -88,7 +86,6 @@ fun UserDetailEntity.toGithubUserDetailItem(): GithubUserDetailItem {
         public_repos = public_repos,
         followers = followers,
         following = following,
-        isFavorite = isFavorite
     )
 }
 
@@ -100,7 +97,6 @@ fun GithubUserDetailItem.toUserDetailEntity(): UserDetailEntity {
         public_repos = public_repos,
         followers = followers,
         following = following,
-        isFavorite = isFavorite
     )
 
 

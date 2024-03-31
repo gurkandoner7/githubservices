@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.portal.githubservices.data.model.GitHubUserInfoItem
 import com.portal.githubservices.data.model.GithubUserItem
+import com.portal.githubservices.domain.mapper.toFavoriteEntity
 import com.portal.githubservices.domain.mapper.toGitHubUserInfoItem
 import com.portal.githubservices.domain.usecase.GithubUseCase
 import com.portal.githubservices.domain.usecase.room.LocalUseCase
-import com.portal.githubservices.repository.db.FavoriteEntity
 import com.portal.githubservices.repository.db.SearchResultEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,8 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val useCase: GithubUseCase,
-    private val localUseCase: LocalUseCase
+    private val useCase: GithubUseCase, private val localUseCase: LocalUseCase
 ) : ViewModel() {
 
     private val _searchedUser = MutableSharedFlow<GithubUserItem>()
@@ -30,25 +29,15 @@ class SearchViewModel @Inject constructor(
     private val _searchedUserFromCache = MutableStateFlow<List<GitHubUserInfoItem>>(emptyList())
     val searchedUserFromCache = _searchedUserFromCache.asStateFlow()
 
-    private val _errorFlow = MutableSharedFlow<String>()
-    val errorFlow = _errorFlow.asSharedFlow()
-
     fun getSearchUserList(query: String?) {
         viewModelScope.launch {
             try {
                 localUseCase.deleteAllSearchResults()
-                val response = query?.let { useCase.getSearchUser(it, 3, 30) }
+                val response = query?.let { useCase.getSearchUser(it, 1, 50) }
                 response?.let { _searchedUser.emit(it) }
             } catch (e: Exception) {
-                _errorFlow.emit("qweqweqwe")
+                e
             }
-        }
-    }
-
-
-    fun updateFavorite(favoriteEntity: FavoriteEntity) {
-        viewModelScope.launch(Dispatchers.IO) {
-            localUseCase.updateFavorite(favoriteEntity)
         }
     }
 
@@ -61,6 +50,33 @@ class SearchViewModel @Inject constructor(
     fun getSearchResultListFromDb() {
         viewModelScope.launch(Dispatchers.IO) {
             _searchedUserFromCache.value = localUseCase.getAllSearchResults().toGitHubUserInfoItem()
+        }
+    }
+
+    fun updateFavorite(item: GitHubUserInfoItem, state: Boolean) {
+        if (state) {
+            viewModelScope.launch {
+                localUseCase.deleteFavorite(item.toFavoriteEntity())
+                item.isFavorite = false
+            }
+        } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                localUseCase.addFavorite(item.toFavoriteEntity())
+                item.isFavorite = true
+            }
+        }
+    }
+
+    fun checkFavorites(list: List<GitHubUserInfoItem>) {
+        viewModelScope.launch {
+            val matchingFavorites = list.filter { searchedItem ->
+                localUseCase.getFavorite().map { favoriteItem ->
+                    favoriteItem.id
+                }.contains(searchedItem.id)
+            }
+            matchingFavorites.forEach {
+                it.isFavorite = true
+            }
         }
     }
 

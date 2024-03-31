@@ -20,7 +20,6 @@ interface UserDetailDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addUserDetailList(userDetailEntities: List<UserDetailEntity>)
 
-    @Query("UPDATE user_detail_table SET isFavorite = :isFavorite WHERE id = :id")
-    fun updateFavorite(id: Long, isFavorite: Boolean)
+
 
 }

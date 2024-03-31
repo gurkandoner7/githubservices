@@ -12,5 +12,4 @@ data class GitHubUserInfoResponse(
     val id: Long,
     val login: String? = "",
     val avatar_url: String? = "",
-    var isFavorite: Boolean = false,
 ) : Serializable

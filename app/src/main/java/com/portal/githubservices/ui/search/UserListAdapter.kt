@@ -12,7 +12,7 @@ import com.portal.githubservices.utilities.extensions.loadImageWithUrlAndPlaceHo
 @SuppressLint("NotifyDataSetChanged")
 class UserListAdapter(
     private val onItemSelected: (GitHubUserInfoItem) -> Unit,
-    private val onFavoriteStateChanged: (GitHubUserInfoItem) -> Unit
+    private val onFavoriteStateChanged: (GitHubUserInfoItem, Boolean) -> Unit
 
 
 ) : RecyclerView.Adapter<UserListAdapter.UserListViewHolder>() {
@@ -32,11 +32,11 @@ class UserListAdapter(
                 btnFavorite.apply {
                     isActivated = item.isFavorite
                     setOnClickListener {
-                        item.isFavorite = !item.isFavorite
-                        isActivated = item.isFavorite
-                        onFavoriteStateChanged(item)
-                        if (!item.isFavorite) {
-                            removeItem(item)
+                        btnFavorite.isActivated = !btnFavorite.isActivated
+                        if (btnFavorite.isActivated) {
+                            onFavoriteStateChanged(item, false)
+                        } else {
+                            onFavoriteStateChanged(item, true)
                         }
                     }
                 }
@@ -64,7 +64,9 @@ class UserListAdapter(
         notifyDataSetChanged()
     }
 
+
     fun removeItem(item: GitHubUserInfoItem) {
+        item.isFavorite = false
         val index = items.indexOf(item)
         if (index != -1) {
             items.removeAt(index)
@@ -72,5 +74,6 @@ class UserListAdapter(
 
         }
     }
+
 
 }
