@@ -69,6 +69,9 @@ class SearchViewModel @Inject constructor(
 
     fun checkFavorites(list: List<GitHubUserInfoItem>) {
         viewModelScope.launch {
+            list.map {
+                it.isFavorite = false
+            }
             val matchingFavorites = list.filter { searchedItem ->
                 localUseCase.getFavorite().map { favoriteItem ->
                     favoriteItem.id

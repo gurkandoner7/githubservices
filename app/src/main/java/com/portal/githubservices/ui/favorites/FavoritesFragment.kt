@@ -2,6 +2,7 @@ package com.portal.githubservices.ui.favorites
 
 import android.os.Bundle
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.portal.githubservices.R
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class FavoritesFragment : BaseFragment(R.layout.fragment_favorites) {
 
-    private val favoritesViewModel: FavoritesViewModel by activityViewModels()
+    private val favoritesViewModel: FavoritesViewModel by viewModels()
     private val binding: FragmentFavoritesBinding by viewBinding(FragmentFavoritesBinding::bind)
     private lateinit var adapter: UserListAdapter
 
@@ -25,11 +26,12 @@ class FavoritesFragment : BaseFragment(R.layout.fragment_favorites) {
         lifecycleScope.launch {
             launch {
                 favoritesViewModel.favoriteList.collect { listItem ->
+                    val list = listItem.toGitHubUserInfoList()
                     if (listItem.isNotEmpty()) {
-                        listItem.toGitHubUserInfoList().map {
+                        list.map {
                             it.isFavorite = true
                         }
-                        adapter.updateItems(listItem.toGitHubUserInfoList())
+                        adapter.updateItems(list)
                     }
                 }
             }

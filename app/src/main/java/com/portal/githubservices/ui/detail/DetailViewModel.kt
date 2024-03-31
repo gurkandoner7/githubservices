@@ -55,7 +55,12 @@ class DetailViewModel @Inject constructor(
     }
 
 
-    fun checkFavoriteState(state: Boolean) {
-        _favoriteState.value = state
+    fun checkFavoriteState(response: GithubUserDetailItem): Boolean {
+        viewModelScope.launch {
+            _favoriteState.value = localUseCase.getFavorite().any {
+                it.id == response.id
+            }
+        }
+        return favoriteState.value
     }
 }

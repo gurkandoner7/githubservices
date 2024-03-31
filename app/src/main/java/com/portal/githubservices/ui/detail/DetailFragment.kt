@@ -2,6 +2,7 @@ package com.portal.githubservices.ui.detail
 
 import android.os.Bundle
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.portal.githubservices.R
 import com.portal.githubservices.compose.BaseFragment
@@ -15,7 +16,7 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DetailFragment : BaseFragment(R.layout.fragment_detail) {
-    private val detailViewModel: DetailViewModel by activityViewModels()
+    private val detailViewModel: DetailViewModel by viewModels()
     private val binding: FragmentDetailBinding by viewBinding(FragmentDetailBinding::bind)
 
     override fun observeVariables() {
@@ -41,8 +42,13 @@ class DetailFragment : BaseFragment(R.layout.fragment_detail) {
                                 MAGIC_KEY, repoCount
                             )
                         }
+                        binding.ivFavorite.apply {
+                            isActivated = detailViewModel.checkFavoriteState(response)
+                            setOnClickListener {
+
+                            }
+                        }
                     }
-                    detailViewModel.checkFavoriteState(response.isFavorite)
                 }
             }
             launch {

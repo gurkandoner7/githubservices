@@ -7,5 +7,5 @@ data class GithubUserDetailItem(
     val public_repos: String? = "",
     val followers: String? = "",
     val following: String? = "",
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean? = false
 )

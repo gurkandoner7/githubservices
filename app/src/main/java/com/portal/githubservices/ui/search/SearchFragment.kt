@@ -2,7 +2,7 @@ package com.portal.githubservices.ui.search
 
 import android.os.Bundle
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.portal.githubservices.R
@@ -16,17 +16,24 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
-    private val searchViewModel: SearchViewModel by activityViewModels()
+    private val searchViewModel: SearchViewModel by viewModels()
     private val binding: FragmentSearchBinding by viewBinding(FragmentSearchBinding::bind)
     private lateinit var adapter: UserListAdapter
 
     override fun observeVariables() {
+        setAdapter()
         lifecycleScope.launch {
             launch {
-                searchViewModel.searchedUser.collect { searchedItem ->
-                    searchViewModel.checkFavorites(searchedItem.items)
-                    searchViewModel.addSearchResult(searchedItem.items.toSearchResultEntity())
-                    adapter.updateItems(searchedItem.items)
+                searchViewModel.searchedUser.collect { searchedList ->
+                    searchViewModel.checkFavorites(searchedList.items)
+                    searchViewModel.addSearchResult(searchedList.items.toSearchResultEntity())
+                    adapter.updateItems(searchedList.items)
+                }
+            }
+            launch {
+                searchViewModel.searchedUserFromCache.collect{cacheList->
+                    searchViewModel.checkFavorites(cacheList)
+                    adapter.updateItems(cacheList)
                 }
             }
         }
@@ -34,22 +41,21 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
 
     override fun initUI(savedInstanceState: Bundle?) {
-        setAdapter()
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if (!query.isNullOrEmpty()) {
-                    searchViewModel.getSearchUserList(query)
+        binding.searchView.apply {
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    if (!query.isNullOrEmpty()) {
+                        searchViewModel.getSearchUserList(query)
+                    }
+                    return true
                 }
-                return true
-            }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
-        })
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    return false
+                }
+            })
+        }
         searchViewModel.getSearchResultListFromDb()
-        searchViewModel.checkFavorites(searchViewModel.searchedUserFromCache.value)
-        adapter.updateItems(searchViewModel.searchedUserFromCache.value)
     }
 
     private fun setAdapter() {
@@ -63,6 +69,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
             searchViewModel.updateFavorite(item, state)
         })
         binding.rvUserList.adapter = adapter
+
     }
 
 }

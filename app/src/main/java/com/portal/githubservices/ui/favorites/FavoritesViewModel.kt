@@ -18,6 +18,7 @@ class FavoritesViewModel @Inject constructor(private val localUseCase: LocalUseC
     private val _favoriteList = MutableStateFlow<List<FavoriteEntity>>(emptyList())
     val favoriteList = _favoriteList.asStateFlow()
 
+
     fun getFavorites() {
         viewModelScope.launch {
             _favoriteList.value = localUseCase.getFavorite()
@@ -29,11 +30,13 @@ class FavoritesViewModel @Inject constructor(private val localUseCase: LocalUseC
             viewModelScope.launch {
                 localUseCase.deleteFavorite(item.toFavoriteEntity())
                 item.isFavorite = false
+                getFavorites()
             }
         } else {
             viewModelScope.launch {
                 localUseCase.addFavorite(item.toFavoriteEntity())
                 item.isFavorite = true
+                getFavorites()
             }
         }
     }
