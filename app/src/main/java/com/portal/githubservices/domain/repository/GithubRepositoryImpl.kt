@@ -1,6 +1,8 @@
 package com.portal.githubservices.domain.repository
 
 import com.portal.githubservices.data.GithubService
+import com.portal.githubservices.data.base.NetworkResult
+import com.portal.githubservices.data.base.safeApiCall
 import com.portal.githubservices.data.model.GithubUserDetailItem
 import com.portal.githubservices.data.model.GithubUserItem
 import com.portal.githubservices.domain.mapper.toGithubUserDetailItem
@@ -13,22 +15,21 @@ class GithubRepositoryImpl @Inject constructor(
 
     override suspend fun getSearchUser(
         searchKeyword: String, page: Int, perPage: Int
-    ): GithubUserItem {
-        try {
-            return githubService.getSearchUser(searchKeyword, page, perPage).toGithubUserItem()
-        } catch (e: Exception) {
-            throw e
+    ): NetworkResult<GithubUserItem> {
+        return safeApiCall {
+            githubService.getSearchUser(searchKeyword, page, perPage)
+        }.map {
+            it.toGithubUserItem()
         }
     }
 
     override suspend fun getUserRepositories(
         user: String
-    ): GithubUserDetailItem {
-        try {
-            return githubService.getUserRepositories(user).toGithubUserDetailItem()
-        } catch (e: Exception) {
-            throw e
+    ): NetworkResult<GithubUserDetailItem> {
+        return safeApiCall {
+            githubService.getUserRepositories(user)
+        }.map {
+            it.toGithubUserDetailItem()
         }
-
     }
 }

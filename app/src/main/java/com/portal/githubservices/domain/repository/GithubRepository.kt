@@ -1,5 +1,6 @@
 package com.portal.githubservices.domain.repository
 
+import com.portal.githubservices.data.base.NetworkResult
 import com.portal.githubservices.data.model.GithubUserDetailItem
 import com.portal.githubservices.data.model.GithubUserItem
 
@@ -8,7 +9,7 @@ interface GithubRepository {
         searchKeyword: String,
         page: Int,
         perPage: Int
-    ): GithubUserItem
+    ): NetworkResult<GithubUserItem>
 
-    suspend fun getUserRepositories(user: String): GithubUserDetailItem
+    suspend fun getUserRepositories(user: String): NetworkResult<GithubUserDetailItem>
 }

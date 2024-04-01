@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".ui.detail.DetailFragment">
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -12,6 +13,17 @@
         android:layout_height="@dimen/dimen_185dp"
         android:layout_marginTop="@dimen/dimen_16dp"
         android:background="@drawable/ic_dummy_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -59,18 +71,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_following" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/iv_favorite"
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/btn_favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@null"
         android:clickable="true"
-        android:src="@drawable/ic_favorite"
+        app:buttonCompat="@drawable/ic_favorite_selector"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_avatar"
         app:layout_constraintTop_toTopOf="@+id/iv_avatar" />
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

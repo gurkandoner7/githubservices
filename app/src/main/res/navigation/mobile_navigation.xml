@@ -9,23 +9,17 @@
         android:id="@+id/navigation_search"
         android:name="com.portal.githubservices.ui.search.SearchFragment"
         android:label="@string/title_search"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_navigation_search_to_navigation_detail"
             app:destination="@id/navigation_detail" />
-        <action
-            android:id="@+id/action_navigation_search_to_navigation_favorites"
-            app:destination="@id/navigation_favorites" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_favorites"
         android:name="com.portal.githubservices.ui.favorites.FavoritesFragment"
         android:label="@string/title_favorites"
-        tools:layout="@layout/fragment_favorites" >
-        <action
-            android:id="@+id/action_navigation_favorites_to_navigation_search"
-            app:destination="@id/navigation_search" />
+        tools:layout="@layout/fragment_favorites">
         <action
             android:id="@+id/action_navigation_favorites_to_navigation_detail"
             app:destination="@id/navigation_detail" />
@@ -34,14 +28,7 @@
         android:id="@+id/navigation_detail"
         android:name="com.portal.githubservices.ui.detail.DetailFragment"
         android:label="@string/title_detail"
-        tools:layout="@layout/fragment_detail" >
-        <action
-            android:id="@+id/action_navigation_detail_to_navigation_search"
-            app:destination="@id/navigation_search" />
-        <action
-            android:id="@+id/action_navigation_detail_to_navigation_favorites"
-            app:destination="@id/navigation_favorites" />
-    </fragment>
+        tools:layout="@layout/fragment_detail" />
 
 
 </navigation>

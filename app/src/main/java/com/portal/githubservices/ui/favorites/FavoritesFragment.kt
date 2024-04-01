@@ -2,13 +2,12 @@ package com.portal.githubservices.ui.favorites
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.view.size
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.portal.githubservices.R
-import com.portal.githubservices.compose.BaseFragment
-import com.portal.githubservices.compose.viewBinding
+import com.portal.githubservices.base.BaseFragment
+import com.portal.githubservices.base.viewBinding
 import com.portal.githubservices.databinding.FragmentFavoritesBinding
 import com.portal.githubservices.domain.mapper.toGitHubUserInfoList
 import com.portal.githubservices.ui.search.UserListAdapter

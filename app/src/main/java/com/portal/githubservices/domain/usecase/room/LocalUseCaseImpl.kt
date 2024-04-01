@@ -31,8 +31,11 @@ class LocalUseCaseImpl @Inject constructor(private val localRepository: LocalRep
     override suspend fun getAllSearchResults() = localRepository.getAllSearchResults()
 
     override suspend fun getFavorite() = localRepository.getFavorites()
-    override suspend fun deleteFavorite(favoriteEntity: FavoriteEntity) = localRepository.deleteFavorite(favoriteEntity)
+    override suspend fun deleteFavorite(favoriteEntity: FavoriteEntity) =
+        localRepository.deleteFavorite(favoriteEntity)
+
     override suspend fun addFavorite(favoriteEntity: FavoriteEntity) =
         localRepository.addFavorite(favoriteEntity)
+
 
 }

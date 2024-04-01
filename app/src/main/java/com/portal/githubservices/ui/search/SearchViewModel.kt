@@ -2,6 +2,9 @@ package com.portal.githubservices.ui.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.portal.githubservices.data.base.NetworkResult
+import com.portal.githubservices.data.base.onError
+import com.portal.githubservices.data.base.onSuccess
 import com.portal.githubservices.data.model.GitHubUserInfoItem
 import com.portal.githubservices.data.model.GithubUserItem
 import com.portal.githubservices.domain.mapper.toFavoriteEntity
@@ -23,7 +26,7 @@ class SearchViewModel @Inject constructor(
     private val useCase: GithubUseCase, private val localUseCase: LocalUseCase
 ) : ViewModel() {
 
-    private val _searchedUser = MutableSharedFlow<GithubUserItem>()
+    private val _searchedUser = MutableSharedFlow<NetworkResult<GithubUserItem>>()
     val searchedUser = _searchedUser.asSharedFlow()
 
     private val _searchedUserFromCache = MutableStateFlow<List<GitHubUserInfoItem>>(emptyList())
@@ -31,12 +34,16 @@ class SearchViewModel @Inject constructor(
 
     fun getSearchUserList(query: String?) {
         viewModelScope.launch {
-            try {
-                localUseCase.deleteAllSearchResults()
-                val response = query?.let { useCase.getSearchUser(it, 1, 50) }
-                response?.let { _searchedUser.emit(it) }
-            } catch (e: Exception) {
-                e
+            _searchedUser.emit(NetworkResult.Loading(isLoading = true))
+            localUseCase.deleteAllSearchResults()
+            query?.let { query ->
+                useCase.getSearchUser(query,1,50).onSuccess {result->
+                    _searchedUser.emit(NetworkResult.Loading(isLoading = false))
+                    _searchedUser.emit(NetworkResult.Success(result))
+                }.onError { errorMessage ->
+                    _searchedUser.emit(NetworkResult.Loading(isLoading = false))
+                    _searchedUser.emit(NetworkResult.Error(errorMessage))
+                }
             }
         }
     }

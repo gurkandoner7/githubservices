@@ -9,5 +9,4 @@ data class FavoriteEntity(
     @PrimaryKey val id: Long,
     @ColumnInfo(name = "login") val login: String?,
     @ColumnInfo(name = "avatar_url") val avatar_url: String?,
-
-    )
+)

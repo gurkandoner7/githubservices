@@ -1,4 +1,4 @@
-package com.portal.githubservices.compose
+package com.portal.githubservices.base
 
 
 import android.view.LayoutInflater

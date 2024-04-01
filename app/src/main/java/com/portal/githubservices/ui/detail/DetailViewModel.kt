@@ -2,6 +2,9 @@ package com.portal.githubservices.ui.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.portal.githubservices.data.base.NetworkResult
+import com.portal.githubservices.data.base.onError
+import com.portal.githubservices.data.base.onSuccess
 import com.portal.githubservices.data.model.GitHubUserInfoItem
 import com.portal.githubservices.data.model.GithubUserDetailItem
 import com.portal.githubservices.domain.mapper.toFavoriteEntity
@@ -15,7 +18,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,11 +26,8 @@ class DetailViewModel @Inject constructor(
     private val localUseCase: LocalUseCase
 ) : ViewModel() {
 
-    private val _selectedUser = MutableSharedFlow<GithubUserDetailItem>()
+    private val _selectedUser = MutableSharedFlow<NetworkResult<GithubUserDetailItem>>()
     val selectedUser = _selectedUser.asSharedFlow()
-
-    private val _getAllUserDetails = MutableStateFlow<List<UserDetailEntity>>(emptyList())
-    val getAllUserDetails = _getAllUserDetails.asStateFlow()
 
     private val _favoriteState = MutableStateFlow<Boolean>(false)
     val favoriteState = _favoriteState.asStateFlow()
@@ -38,26 +37,22 @@ class DetailViewModel @Inject constructor(
         user: String
     ) {
         viewModelScope.launch {
-            try {
-                _selectedUser.emit(githubUseCase.getUserRepositories(user = user))
-            } catch (e: Exception) {
-                e
+            _selectedUser.emit(NetworkResult.Loading(isLoading = true))
+            githubUseCase.getUserRepositories(user = user).onSuccess {
+                _selectedUser.emit(NetworkResult.Loading(isLoading = false))
+                _selectedUser.emit(NetworkResult.Success(it))
+            }.onError { message ->
+                _selectedUser.emit(NetworkResult.Loading(isLoading = true))
+                _selectedUser.emit(NetworkResult.Error(message))
             }
         }
     }
-
-    /*    fun getAllUserDetails() {
-            viewModelScope.launch(Dispatchers.IO) {
-                _getAllUserDetails.value = localUseCase.getAllUserDetails()
-            }
-        }*/
 
     fun addToUserDetailEntity(userDetailEntity: UserDetailEntity) {
         viewModelScope.launch(Dispatchers.IO) {
             localUseCase.addUserDetail(userDetailEntity)
         }
     }
-
 
     fun updateFavorite(item: GitHubUserInfoItem, state: Boolean) {
         if (state) {
@@ -73,11 +68,11 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    fun checkFavoriteState(response: GithubUserDetailItem): Boolean {
-        return runBlocking {
-                localUseCase.getFavorite().any {
-                     it.id == response.id
-                 }
-         }
+    fun checkFavoriteState(response: GithubUserDetailItem) {
+        viewModelScope.launch {
+            _favoriteState.value = localUseCase.getFavorite().any {
+                it.id == response.id
+            }
+        }
     }
 }

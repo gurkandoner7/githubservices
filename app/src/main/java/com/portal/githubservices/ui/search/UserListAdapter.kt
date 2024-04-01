@@ -29,10 +29,9 @@ class UserListAdapter(
                     item.avatar_url, R.drawable.ic_dummy_profile
                 )
                 btnFavorite.apply {
-                    isActivated = item.isFavorite
+                    isChecked = item.isFavorite
                     setOnClickListener {
-                        btnFavorite.isActivated = !btnFavorite.isActivated
-                        if (btnFavorite.isActivated) {
+                        if (isChecked) {
                             onFavoriteStateChanged(item, false)
                         } else {
                             onFavoriteStateChanged(item, true)
