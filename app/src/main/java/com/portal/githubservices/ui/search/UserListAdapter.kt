@@ -12,9 +12,8 @@ import com.portal.githubservices.utilities.extensions.loadImageWithUrlAndPlaceHo
 @SuppressLint("NotifyDataSetChanged")
 class UserListAdapter(
     private val onItemSelected: (GitHubUserInfoItem) -> Unit,
-    private val onFavoriteStateChanged: (GitHubUserInfoItem, Boolean) -> Unit
-
-
+    private val onFavoriteStateChanged: (GitHubUserInfoItem, Boolean) -> Unit,
+    private val onListItemSize: (Int) -> Unit
 ) : RecyclerView.Adapter<UserListAdapter.UserListViewHolder>() {
     private var items = mutableListOf<GitHubUserInfoItem>()
 
@@ -27,7 +26,7 @@ class UserListAdapter(
                     onItemSelected(item)
                 }
                 ivAvatar.loadImageWithUrlAndPlaceHolder(
-                    item.avatar_url, R.drawable.ic_notifications_black_24dp
+                    item.avatar_url, R.drawable.ic_dummy_profile
                 )
                 btnFavorite.apply {
                     isActivated = item.isFavorite
@@ -56,7 +55,10 @@ class UserListAdapter(
         holder.bind(items[position])
     }
 
-    override fun getItemCount() = items.size
+    override fun getItemCount(): Int {
+        onListItemSize(items.size)
+        return items.size
+    }
 
     fun updateItems(newItems: List<GitHubUserInfoItem>) {
         items.clear()
@@ -77,3 +79,4 @@ class UserListAdapter(
 
 
 }
+

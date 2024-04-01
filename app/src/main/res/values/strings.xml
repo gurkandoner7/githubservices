@@ -6,4 +6,5 @@
     <string name="followers">Followers:%!%!</string>
     <string name="following">Following:%!%!</string>
     <string name="repository_amount">Repository Amount:%!%!</string>
+    <string name="favorites_empty">The favorites list appears \nto be empty.</string>
 </resources>

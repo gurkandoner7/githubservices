@@ -1,7 +1,8 @@
 package com.portal.githubservices.ui.favorites
 
 import android.os.Bundle
-import androidx.fragment.app.activityViewModels
+import android.view.View
+import androidx.core.view.size
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -52,6 +53,10 @@ class FavoritesFragment : BaseFragment(R.layout.fragment_favorites) {
         }, onFavoriteStateChanged = { item, state ->
             favoritesViewModel.updateFavorite(item, state)
             if (state) adapter.removeItem(item)
+        }, onListItemSize = { count ->
+            if (count == 0) {
+                binding.tvEmptyFavoriteList.visibility = View.VISIBLE
+            } else binding.tvEmptyFavoriteList.visibility = View.GONE
         })
         binding.rvUserList.adapter = adapter
     }

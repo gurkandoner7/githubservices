@@ -98,6 +98,10 @@ fun GithubUserDetailItem.toUserDetailEntity(): UserDetailEntity {
         followers = followers,
         following = following,
     )
+}
 
-
+fun GithubUserDetailItem.toGitHubUserInfoItem(): GitHubUserInfoItem {
+    return GitHubUserInfoItem(
+        id, login, avatar_url
+    )
 }

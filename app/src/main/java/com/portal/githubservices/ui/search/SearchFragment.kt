@@ -31,7 +31,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                 }
             }
             launch {
-                searchViewModel.searchedUserFromCache.collect{cacheList->
+                searchViewModel.searchedUserFromCache.collect { cacheList ->
                     searchViewModel.checkFavorites(cacheList)
                     adapter.updateItems(cacheList)
                 }
@@ -67,6 +67,12 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
                 ?.navigate(R.id.action_navigation_search_to_navigation_detail, bundle)
         }, onFavoriteStateChanged = { item, state ->
             searchViewModel.updateFavorite(item, state)
+        }, onListItemSize = { count ->
+            if (count == 0) {
+
+            } else {
+
+            }
         })
         binding.rvUserList.adapter = adapter
 

@@ -2,7 +2,9 @@ package com.portal.githubservices.ui.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.portal.githubservices.data.model.GitHubUserInfoItem
 import com.portal.githubservices.data.model.GithubUserDetailItem
+import com.portal.githubservices.domain.mapper.toFavoriteEntity
 import com.portal.githubservices.domain.usecase.GithubUseCase
 import com.portal.githubservices.domain.usecase.room.LocalUseCase
 import com.portal.githubservices.repository.db.UserDetailEntity
@@ -13,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,6 +33,7 @@ class DetailViewModel @Inject constructor(
     private val _favoriteState = MutableStateFlow<Boolean>(false)
     val favoriteState = _favoriteState.asStateFlow()
 
+
     fun getSelectedUserRepos(
         user: String
     ) {
@@ -42,11 +46,11 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-    fun getAllUserDetails() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _getAllUserDetails.value = localUseCase.getAllUserDetails()
-        }
-    }
+    /*    fun getAllUserDetails() {
+            viewModelScope.launch(Dispatchers.IO) {
+                _getAllUserDetails.value = localUseCase.getAllUserDetails()
+            }
+        }*/
 
     fun addToUserDetailEntity(userDetailEntity: UserDetailEntity) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -55,12 +59,25 @@ class DetailViewModel @Inject constructor(
     }
 
 
-    fun checkFavoriteState(response: GithubUserDetailItem): Boolean {
-        viewModelScope.launch {
-            _favoriteState.value = localUseCase.getFavorite().any {
-                it.id == response.id
+    fun updateFavorite(item: GitHubUserInfoItem, state: Boolean) {
+        if (state) {
+            viewModelScope.launch {
+                localUseCase.deleteFavorite(item.toFavoriteEntity())
+                item.isFavorite = false
+            }
+        } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                localUseCase.addFavorite(item.toFavoriteEntity())
+                item.isFavorite = true
             }
         }
-        return favoriteState.value
+    }
+
+    fun checkFavoriteState(response: GithubUserDetailItem): Boolean {
+        return runBlocking {
+                localUseCase.getFavorite().any {
+                     it.id == response.id
+                 }
+         }
     }
 }

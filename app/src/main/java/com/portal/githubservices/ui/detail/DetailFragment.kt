@@ -1,13 +1,14 @@
 package com.portal.githubservices.ui.detail
 
 import android.os.Bundle
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.portal.githubservices.R
 import com.portal.githubservices.compose.BaseFragment
 import com.portal.githubservices.compose.viewBinding
+import com.portal.githubservices.data.model.GithubUserDetailItem
 import com.portal.githubservices.databinding.FragmentDetailBinding
+import com.portal.githubservices.domain.mapper.toGitHubUserInfoItem
 import com.portal.githubservices.domain.mapper.toUserDetailEntity
 import com.portal.githubservices.utilities.extensions.loadImageWithUrlAndPlaceHolder
 import com.portal.githubservices.utilities.helper.Util.Companion.MAGIC_KEY
@@ -24,52 +25,45 @@ class DetailFragment : BaseFragment(R.layout.fragment_detail) {
             launch {
                 detailViewModel.selectedUser.collect { response ->
                     detailViewModel.addToUserDetailEntity(response.toUserDetailEntity())
-                    binding.apply {
-                        tvDetailUserName.text = response.login
-                        ivAvatar.loadImageWithUrlAndPlaceHolder(
-                            response.avatar_url, R.drawable.ic_notifications_black_24dp
-                        )
-                        tvFollowers.text = response.followers?.let { followersCount ->
-                            getString(R.string.followers).replace(
-                                MAGIC_KEY, followersCount
-                            )
-                        }
-                        tvFollowing.text = response.following?.let { followingCount ->
-                            getString(R.string.following).replace(MAGIC_KEY, followingCount)
-                        }
-                        tvPublicRepoCount.text = response.public_repos?.let { repoCount ->
-                            getString(R.string.repository_amount).replace(
-                                MAGIC_KEY, repoCount
-                            )
-                        }
-                        binding.ivFavorite.apply {
-                            isActivated = detailViewModel.checkFavoriteState(response)
-                            setOnClickListener {
-
-                            }
-                        }
-                    }
-                }
-            }
-            launch {
-                detailViewModel.favoriteState.collect {favoriteState ->
-                    binding.ivFavorite.isActivated = favoriteState
-                }
-            }
-            launch {
-                detailViewModel.getAllUserDetails.collect { entityResponse ->
-                    entityResponse.forEach { detailEntity ->
-                    }
+                    fillUIComponentsWithResponse(response)
                 }
             }
         }
     }
 
     override fun initUI(savedInstanceState: Bundle?) {
+        detailViewModel.getSelectedUserRepos(arguments?.getString("login") ?: "")
+    }
 
-        detailViewModel.getSelectedUserRepos(arguments?.getString("login") ?: "null")
-        binding.testButton.setOnClickListener {
-            detailViewModel.getAllUserDetails()
+    private fun fillUIComponentsWithResponse(detailResponse: GithubUserDetailItem) {
+        binding.apply {
+            tvDetailUserName.text = detailResponse.login
+            ivAvatar.loadImageWithUrlAndPlaceHolder(
+                detailResponse.avatar_url, R.drawable.ic_dummy_profile
+            )
+            tvFollowers.text = detailResponse.followers?.let { followersCount ->
+                getString(R.string.followers).replace(
+                    MAGIC_KEY, followersCount
+                )
+            }
+            tvFollowing.text = detailResponse.following?.let { followingCount ->
+                getString(R.string.following).replace(MAGIC_KEY, followingCount)
+            }
+            tvPublicRepoCount.text = detailResponse.public_repos?.let { repoCount ->
+                getString(R.string.repository_amount).replace(
+                    MAGIC_KEY, repoCount
+                )
+            }
+            binding.ivFavorite.apply {
+                isActivated = detailViewModel.checkFavoriteState(detailResponse)
+                setOnClickListener {
+                    isActivated = !isActivated
+                    detailViewModel.updateFavorite(
+                        detailResponse.toGitHubUserInfoItem(),
+                        detailViewModel.favoriteState.value
+                    )
+                }
+            }
         }
     }
 
