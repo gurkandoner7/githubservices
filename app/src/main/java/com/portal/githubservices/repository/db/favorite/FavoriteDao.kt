@@ -1,4 +1,4 @@
-package com.portal.githubservices.repository.db
+package com.portal.githubservices.repository.db.favorite
 
 import androidx.room.Dao
 import androidx.room.Delete

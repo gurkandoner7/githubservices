@@ -5,9 +5,9 @@ import com.portal.githubservices.data.model.GithubUserDetailItem
 import com.portal.githubservices.data.model.GithubUserItem
 import com.portal.githubservices.domain.model.response.GithubUserDetailResponse
 import com.portal.githubservices.domain.model.response.GithubUsersResponse
-import com.portal.githubservices.repository.db.FavoriteEntity
-import com.portal.githubservices.repository.db.SearchResultEntity
-import com.portal.githubservices.repository.db.UserDetailEntity
+import com.portal.githubservices.repository.db.favorite.FavoriteEntity
+import com.portal.githubservices.repository.db.searchresult.SearchResultEntity
+import com.portal.githubservices.repository.db.userdetail.UserDetailEntity
 import javax.inject.Inject
 
 class DataMapper @Inject constructor()

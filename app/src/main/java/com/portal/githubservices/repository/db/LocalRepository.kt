@@ -1,6 +1,8 @@
 package com.portal.githubservices.repository.db
 
-import androidx.room.Transaction
+import com.portal.githubservices.repository.db.favorite.FavoriteEntity
+import com.portal.githubservices.repository.db.searchresult.SearchResultEntity
+import com.portal.githubservices.repository.db.userdetail.UserDetailEntity
 import javax.inject.Inject
 import javax.inject.Singleton
 

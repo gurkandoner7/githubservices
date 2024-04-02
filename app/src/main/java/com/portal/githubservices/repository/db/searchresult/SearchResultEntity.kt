@@ -1,4 +1,4 @@
-package com.portal.githubservices.repository.db
+package com.portal.githubservices.repository.db.searchresult
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
