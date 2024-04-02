@@ -22,7 +22,6 @@ class FavoritesFragment : BaseFragment(R.layout.fragment_favorites) {
     private lateinit var adapter: UserListAdapter
 
     override fun observeVariables() {
-        setAdapter()
         lifecycleScope.launch {
             launch {
                 favoritesViewModel.favoriteList.collect { listItem ->
@@ -39,6 +38,8 @@ class FavoritesFragment : BaseFragment(R.layout.fragment_favorites) {
     }
 
     override fun initUI(savedInstanceState: Bundle?) {
+        setAdapter()
+        binding.rvUserList.adapter = adapter
         favoritesViewModel.getFavorites()
     }
 
@@ -57,7 +58,7 @@ class FavoritesFragment : BaseFragment(R.layout.fragment_favorites) {
                 binding.tvEmptyFavoriteList.visibility = View.VISIBLE
             } else binding.tvEmptyFavoriteList.visibility = View.GONE
         })
-        binding.rvUserList.adapter = adapter
+
     }
 
 

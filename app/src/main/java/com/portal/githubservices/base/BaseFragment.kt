@@ -8,8 +8,8 @@ abstract class BaseFragment(bindingLayout: Int) : Fragment(bindingLayout) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeVariables()
         initUI(savedInstanceState)
+        observeVariables()
     }
 
     abstract fun observeVariables()

@@ -23,11 +23,11 @@ class GithubRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserRepositories(
+    override suspend fun getUserDetails(
         user: String
     ): NetworkResult<GithubUserDetailItem> {
         return safeApiCall {
-            githubService.getUserRepositories(user)
+            githubService.getUserDetails(user)
         }.map {
             it.toGithubUserDetailItem()
         }

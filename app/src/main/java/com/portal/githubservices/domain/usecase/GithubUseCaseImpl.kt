@@ -12,8 +12,8 @@ class GithubUseCaseImpl @Inject constructor(private val githubRepository: Github
         searchKeyword: String, page: Int, perPage: Int
     ): NetworkResult<GithubUserItem> = githubRepository.getSearchUser(searchKeyword, page, perPage)
 
-    override suspend fun getUserRepositories(
+    override suspend fun getUserDetails(
         user: String,
-    ): NetworkResult<GithubUserDetailItem> = githubRepository.getUserRepositories(user)
+    ): NetworkResult<GithubUserDetailItem> = githubRepository.getUserDetails(user)
 
 }

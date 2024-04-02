@@ -21,19 +21,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
     private val searchViewModel: SearchViewModel by viewModels()
     private val binding: FragmentSearchBinding by viewBinding(FragmentSearchBinding::bind)
-    private var adapter = UserListAdapter(onItemSelected = { selectedUser ->
-        val bundle = Bundle().apply {
-            putString("login", selectedUser.login)
-        }
-        view?.findNavController()
-            ?.navigate(R.id.action_navigation_search_to_navigation_detail, bundle)
-    }, onFavoriteStateChanged = { item, state ->
-        searchViewModel.updateFavorite(item, state)
-    }, onListItemSize = { count ->
-        if (count == 0) {
-            binding.tvSearchListEmpty.visibility = View.VISIBLE
-        } else binding.tvSearchListEmpty.visibility = View.GONE
-    })
+    private lateinit var adapter: UserListAdapter
 
     override fun observeVariables() {
         lifecycleScope.launch {
@@ -80,6 +68,7 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
 
 
     override fun initUI(savedInstanceState: Bundle?) {
+        setAdapter()
         binding.rvUserList.adapter = adapter
         binding.searchView.apply {
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -98,4 +87,20 @@ class SearchFragment : BaseFragment(R.layout.fragment_search) {
         searchViewModel.getSearchResultListFromDb()
     }
 
+    private fun setAdapter() {
+        adapter = UserListAdapter(onItemSelected = { selectedUser ->
+            val bundle = Bundle().apply {
+                putString("login", selectedUser.login)
+            }
+            view?.findNavController()
+                ?.navigate(R.id.action_navigation_search_to_navigation_detail, bundle)
+
+        }, onFavoriteStateChanged = { item, state ->
+            searchViewModel.updateFavorite(item, state)
+        }, onListItemSize = { count ->
+            if (count == 0) {
+                binding.tvSearchListEmpty.visibility = View.VISIBLE
+            } else binding.tvSearchListEmpty.visibility = View.GONE
+        })
+    }
 }

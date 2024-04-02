@@ -21,7 +21,7 @@ interface GithubService {
     ): Response<GithubUsersResponse>
 
     @GET("/users/{user}")
-    suspend fun getUserRepositories(
+    suspend fun getUserDetails(
         @Path("user") user: String,
     ): Response<GithubUserDetailResponse>
 }

@@ -33,12 +33,12 @@ class DetailViewModel @Inject constructor(
     val favoriteState = _favoriteState.asStateFlow()
 
 
-    fun getSelectedUserRepos(
+    fun getSelectedUserDetails(
         user: String
     ) {
         viewModelScope.launch {
             _selectedUser.emit(NetworkResult.Loading(isLoading = true))
-            githubUseCase.getUserRepositories(user = user).onSuccess {
+            githubUseCase.getUserDetails(user = user).onSuccess {
                 _selectedUser.emit(NetworkResult.Loading(isLoading = false))
                 _selectedUser.emit(NetworkResult.Success(it))
             }.onError { message ->

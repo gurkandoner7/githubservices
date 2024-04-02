@@ -73,7 +73,7 @@ class DetailFragment : BaseFragment(R.layout.fragment_detail) {
     }
 
     override fun initUI(savedInstanceState: Bundle?) {
-        detailViewModel.getSelectedUserRepos(arguments?.getString("login") ?: "")
+        detailViewModel.getSelectedUserDetails(arguments?.getString("login") ?: "")
     }
 
     private fun fillUIComponentsWithResponse(detailResponse: GithubUserDetailItem) {

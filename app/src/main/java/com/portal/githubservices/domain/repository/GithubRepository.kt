@@ -11,5 +11,5 @@ interface GithubRepository {
         perPage: Int
     ): NetworkResult<GithubUserItem>
 
-    suspend fun getUserRepositories(user: String): NetworkResult<GithubUserDetailItem>
+    suspend fun getUserDetails(user: String): NetworkResult<GithubUserDetailItem>
 }
